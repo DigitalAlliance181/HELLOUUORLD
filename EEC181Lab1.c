@@ -15,7 +15,7 @@ int main(void)
 //
 //********************************************************************************
 	//Pointers to HW that we WRITE TO 
-	volatile int* led = 		(int*)0xFF200040;		//Reded LED address
+	//volatile int* led = 		(int*)0xFF200040;		//Reded LED address
 	volatile int* hex3_0 = 		(int*)0xFF200020;		//HEX3_HEX0 address
 	volatile int* hex5_4 = 		(int*)0xFF200010;		//HEX5_HEX4 address
 	
@@ -30,29 +30,34 @@ int main(void)
 //********************************************************************************	
 	
 	int switch_value; 		//Int value for Switch positions
-	int push_value; 		//Int value for Buttons pressed
+	int push_value = 0; 		//Int value for Buttons pressed
 	int toggleScroll = 1; 	//Binary value for HelloUUorld vs Specific Segment
-	int hex30; 	//32-Bit int for HEX3 - HEX0
-	int hex3;
-	int hex2;
-	int hex1;
-	int hex0;
-	int hex54; 				// 32-Bit int for HEX5 - HEX4
-	int hex5;
-	int hex4;
+	int hex30 = 0; 	//32-Bit int for HEX3 - HEX0
+	int hex3 = 0;
+	int hex2 = 0;
+	int hex1 = 0;
+	int hex0 = 0;
+	int hex54 = 0; 				// 32-Bit int for HEX5 - HEX4
+	int hex5 = 0;
+	int hex4 = 0;
 	int LBit = 2;			//Bits to determine which part of the scrolling it's on
 	int OBit = 1;
 	int UBit = 1;
 	int specificScrollInt = 0;
-	int delaycount = 1000000000;
+	int delay_count = 1000000;
 	int infiniteDelay = 0;
+	int bullshitVariable;
+	int KEY0 = 1;
+	int KEY1 = 2;
+	int KEY2 = 4;
+	int KEY3 = 8;
 	
 //********************************************************************************
 //
 //			Main loop that checks for changes in buttons presses/switches
 //
 //********************************************************************************
-
+	//*(hex3_0) = hex30;
 	while(1)
 	{
 	
@@ -62,149 +67,134 @@ int main(void)
 //
 //********************************************************************************
 	
-	push_value = *(pushptr)
+	push_value = *(pushptr);
 	//Figure out how to read button values from single int (maybe 8 bits each?) and set to someCorrectValue
 	if(push_value == KEY3)
 		{
 			//Starts at scrolling
-			if(push_value == KEY1) //Faster scroll pressed
+			if(toggleScroll == 1) //Faster scroll pressed
 			{
 				//WAS HelloUUorld, NOW Specific Segments
-				toggleScroll == 0;
+				toggleScroll = 0;
 			}
-			else
+			else if(toggleScroll == 0)
 			{
 				//WAS Speceific Segments, NOW HelloUUorld
-				toggleScroll == 1;
+				toggleScroll = 1;
 			}
 		}
 	if(toggleScroll == 1) //Scrolling Message
 	{
 		//DON'T USE EXPONENTS, THEY WILL BREAK EVERYTHING
 		//2^0 = 1, 2^8 = 256, 2^16 = 65,536, 2^24 = 16,777,216
-		
-		/*//Set HEX5-1 to the values of HEX4-0
-		hex5 = hex4;
-		hex4 = hex3;
-		hex3 = hex2;
-		hex2 = hex1;
-		hex1 = hex0;
-		
-		//Deconstruct hex30 and hex54 to their separate parts and store in hex0, hex1 etc
-		hex5 = hex5_4();
-		hex4 = hex5_4();
-		hex3 = hex3_0();
-		hex2 = hex3_0();
-		hex1 = hex3_0();
-		hex0 = hex3_0();*/
 
 		//Then determine next value for HEX 0 and load that
 		//This could be much nicer, but I'm tired
-		if(hex0 == 200) //Prev was H, will now display ORLDHE
+		if(hex0 == 0 || hex0 == 118) //Prev was H, will now display ORLDHE
 		{
-			hex5 = 129;
-			hex4 = 246;
-			hex3 = 241;
-			hex2 = 192;
-			hex1 = 200;
-			hex0 = 176;
+			hex5 = 63;
+			hex4 = 80;
+			hex3 = 56;
+			hex2 = 94;
+			hex1 = 118;
+			hex0 = 121;
 		}
-		else if(hex0 == 176) //Prev was E, will now display RLDHEL
+		else if(hex0 == 121) //Prev was E, will now display RLDHEL
 		{
-			hex5 = 246;
-			hex4 = 241;
-			hex3 = 192;
-			hex2 = 200;
-			hex1 = 176;
-			hex0 = 241;
+			hex5 = 80;
+			hex4 = 56;
+			hex3 = 94;
+			hex2 = 118;
+			hex1 = 121;
+			hex0 = 56;
 		}
-		else if(hex0 == 241 && LBit == 2) //Prev was L and bit is 2, will now display LDHELL
+		else if(hex0 == 56 && LBit == 2) //Prev was L and bit is 2, will now display LDHELL
 		{
-			hex5 = 241;
-			hex4 = 192;
-			hex3 = 200;
-			hex2 = 176;
-			hex1 = 241;
-			hex0 = 241;
+			hex5 = 56;
+			hex4 = 94;
+			hex3 = 118;
+			hex2 = 121;
+			hex1 = 56;
+			hex0 = 56;
 			LBit--; //Set to 1
 		}
-		else if(hex0 == 241 && LBit == 1) //Prev was L and bit is 1, will now display DHELLO
+		else if(hex0 == 56 && LBit == 1) //Prev was L and bit is 1, will now display DHELLO
 		{
-			hex5 = 192;
-			hex4 = 200;
-			hex3 = 176;
-			hex2 = 241;
-			hex1 = 241;
-			hex0 = 129;
+			hex5 = 94;
+			hex4 = 118;
+			hex3 = 121;
+			hex2 = 56;
+			hex1 = 56;
+			hex0 = 63;
 			LBit--; //Set to 0
 		}
-		else if(hex0 == 129 && OBit == 1) //Prev was 0 and bit is 1, will now display HELLOU
+		else if(hex0 == 63 && OBit == 1) //Prev was 0 and bit is 1, will now display HELLOU
 		{
-			hex5 = 200;
-			hex4 = 176;
-			hex3 = 241;
-			hex2 = 241;
-			hex1 = 129;
-			hex0 = 206;
+			hex5 = 118;
+			hex4 = 121;
+			hex3 = 56;
+			hex2 = 56;
+			hex1 = 63;
+			hex0 = 62;
 			OBit--; //Set to 0
 		}
-		else if(hex0 == 206 && UBit == 1) //Prev was U and bit is 1, will now display ELLOUU
+		else if(hex0 == 62 && UBit == 1) //Prev was U and bit is 1, will now display ELLOUU
 		{
-			hex5 = 176;
-			hex4 = 241;
-			hex3 = 241;
-			hex2 = 129;
-			hex1 = 206;
-			hex0 = 206;
+			hex5 = 121;
+			hex4 = 56;
+			hex3 = 56;
+			hex2 = 63;
+			hex1 = 62;
+			hex0 = 62;
 			UBit--; //Set to 0
 		}
-		else if(hex0 == 206 && UBit == 0) //Prev was U and bit is 0, will now display LLOUUO
+		else if(hex0 == 62 && UBit == 0) //Prev was U and bit is 0, will now display LLOUUO
 		{
-			hex5 = 241;
-			hex4 = 241;
-			hex3 = 129;
-			hex2 = 206;
-			hex1 = 206;
-			hex0 = 129;
+			hex5 = 56;
+			hex4 = 56;
+			hex3 = 63;
+			hex2 = 62;
+			hex1 = 62;
+			hex0 = 63;
 			UBit = 1;
 		}
-		else if(hex0 == 129 && OBit == 0) //Prev was 0 and bit is 0, will now display LOUUOR
+		else if(hex0 == 63 && OBit == 0) //Prev was 0 and bit is 0, will now display LOUUOR
 		{
-			hex5 = 241;
-			hex4 = 129;
-			hex3 = 206;
-			hex2 = 206;
-			hex1 = 129;
-			hex0 = 246;
+			hex5 = 56;
+			hex4 = 63;
+			hex3 = 62;
+			hex2 = 62;
+			hex1 = 63;
+			hex0 = 80;
 			OBit = 1;
 		}
-		else if(hex0 == 246) //Prev was R, will now display OUUORL
+		else if(hex0 == 80) //Prev was R, will now display OUUORL
 		{
-			hex5 = 129;
-			hex4 = 206;
-			hex3 = 206;
-			hex2 = 129;
-			hex1 = 246;
-			hex0 = 241;
+			hex5 = 63;
+			hex4 = 62;
+			hex3 = 62;
+			hex2 = 63;
+			hex1 = 80;
+			hex0 = 56;
 		}
-		else if(hex0 == 241 && LBit == 0) //Prev was L and bit is 0, will now display UUORLD
+		else if(hex0 == 56 && LBit == 0) //Prev was L and bit is 0, will now display UUORLD
 		{
-			hex5 = 206;
-			hex4 = 206;
-			hex3 = 129;
-			hex2 = 246;
-			hex1 = 241;
-			hex0 = 192;
+			hex5 = 62;
+			hex4 = 62;
+			hex3 = 63;
+			hex2 = 80;
+			hex1 = 56;
+			hex0 = 94;
 			LBit = 2;
 		}
-		else if(hex0 == 192) //Prev was D, will now display UORLDH
+		else if(hex0 == 94) //Prev was D, will now display UORLDH
 		{
-			hex5 = 206;
-			hex4 = 129;
-			hex3 = 246;
-			hex2 = 241;
-			hex1 = 192;
-			hex0 = 200;
+			hex5 = 62;
+			hex4 = 63;
+			hex3 = 80;
+			hex2 = 56;
+			hex1 = 94;
+			hex0 = 118;
 		}
 		
 		//Add them all together to make correct hex displays
@@ -233,7 +223,7 @@ int main(void)
 		hex0 = hex0 >> 25; //Now holds 0000_0000_0000_0000_0000_0000_0xxx_xxxx
 		hex1 = switch_value; //hex1 holds ALL bits, too many to be useful
 		hex1 = hex1 >> 7; //Had 10 bits, only want 3 in places 7-9, 'clear' lower 7 bits
-		hex1 = hex1 << 8; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
+		hex1 = hex1 << 1; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
 		//Hex1 now holds the proper value to show on hex1
 		
 		if(specificScrollInt == 0)
@@ -265,11 +255,11 @@ int main(void)
 		} 
 		else if(specificScrollInt == 4)
 		{
-			hex54 = (hex0 * 256) + (hex1);
+			hex54 = (hex1 * 256) + (hex0);
 			*(hex5_4) = hex54;
 			specificScrollInt++;
 		}
-		else(specificScrollInt == 5)
+		else if(specificScrollInt == 5)
 		{
 			hex30 = (hex1); 
 			*(hex3_0) = hex30;
@@ -294,13 +284,13 @@ int main(void)
 	
 	if (push_value == KEY2) //as soon as button 2 value is low do this
 	{
-		delay_count = delay_count + 200000000;
+		delay_count = delay_count + 200000;
 		//Set delay value to 3 (longer delay time... aka slower);
 	}
 	
 	if (push_value == KEY1) //as soon as button 3 value is low do this
 	{
-		delay_count = delay_count - 200000000;
+		delay_count = delay_count - 200000;
 		//set delay value to 1 (shorter delay time... aka faster);
 	}
 	bullshitVariable = 0;
@@ -312,17 +302,21 @@ int main(void)
 //
 //********************************************************************************	
 	
-	else if (push_vaule == KEY0) //as soon as button 4 value is low do this
+	if (push_value == KEY0) //as soon as button 4 value is low do this
 	{
 		infiniteDelay = 1;
 		while(infiniteDelay == 1)
 		{
+			bullshitVariable = 0;
+			while(bullshitVariable++ < (delay_count+10000000)){};
+			
 			if(push_value == KEY0)
 			{
 				infiniteDelay = 0;
 			}
 		}
 	}
+}
 }
 
 //********************************************************************************
@@ -349,22 +343,13 @@ BUT HOW TO PUT THESE VALUES IN WHEN WE CANNOT WORK WITH BITS BUT MUST WORK WITH 
 
 ALL ACTIVE LOW
 To Display _____ use binary code ______ which in decimal is ________	
-0 --- 1000_0001 --- 129
-1 --- 1100_1111 --- 207
-2 --- 1001_0010 --- 146
-3 --- 1000_0110 --- 134
-4 --- 1100_1100 --- 204
-5 --- 1010_0100 --- 164
-6 --- 1010_0000 --- 160
-7 --- 1000_1111 --- 143
-8 --- 1000_0000 --- 128
-9 --- 1000_1100 --- 140
-H --- 1100_1000 --- 200
-E --- 1011_0000 --- 176
-L --- 1111_0001 --- 241
-U --- 1100_1110 --- 206
-R --- 1111_0110 --- 246 //Is lowercase r
-D --- 1100_0000 --- 192 //Is lowercase d
+0 --- 0011_1111 --- 63
+H --- 0111_0110 --- 55 -> 118
+E --- 0111_1001--- 79 -> 121
+L --- 0011_1000--- 14 -> 56
+U --- 0011_1110--- 62 -> 62
+R --- 0101_0000--- 5 -> 80 //Is lowercase r
+D --- 0101_1110--- 61 -> 94 //Is lowercase d
 */
 
 //********************************************************************************
