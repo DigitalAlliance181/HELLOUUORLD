@@ -1,0 +1,111 @@
+	int LBit = 2;			//Bits to determine which part of the scrolling it's on
+	int OBit = 1;
+	int UBit = 1;
+			//This could be much nicer, but I'm tired
+			
+			if(hex0 == 0 || hex0 == 118) //Prev was H, will now display ORLDHE
+			{
+				hex5 = 63;
+				hex4 = 80;
+				hex3 = 56;
+				hex2 = 94;
+				hex1 = 118;
+				hex0 = 121;
+			}
+			else if(hex0 == 121) //Prev was E, will now display RLDHEL
+			{
+				hex5 = 80;
+				hex4 = 56;
+				hex3 = 94;
+				hex2 = 118;
+				hex1 = 121;
+				hex0 = 56;
+			}
+			else if(hex0 == 56 && LBit == 2) //Prev was L and bit is 2, will now display LDHELL
+			{
+				hex5 = 56;
+				hex4 = 94;
+				hex3 = 118;
+				hex2 = 121;
+				hex1 = 56;
+				hex0 = 56;
+				LBit--; //Set to 1
+			}
+			else if(hex0 == 56 && LBit == 1) //Prev was L and bit is 1, will now display DHELLO
+			{
+				hex5 = 94;
+				hex4 = 118;
+				hex3 = 121;
+				hex2 = 56;
+				hex1 = 56;
+				hex0 = 63;
+				LBit--; //Set to 0
+			}
+			else if(hex0 == 63 && OBit == 1) //Prev was 0 and bit is 1, will now display HELLOU
+			{
+				hex5 = 118;
+				hex4 = 121;
+				hex3 = 56;
+				hex2 = 56;
+				hex1 = 63;
+				hex0 = 62;
+				OBit--; //Set to 0
+			}
+			else if(hex0 == 62 && UBit == 1) //Prev was U and bit is 1, will now display ELLOUU
+			{
+				hex5 = 121;
+				hex4 = 56;
+				hex3 = 56;
+				hex2 = 63;
+				hex1 = 62;
+				hex0 = 62;
+				UBit--; //Set to 0
+			}
+			else if(hex0 == 62 && UBit == 0) //Prev was U and bit is 0, will now display LLOUUO
+			{
+				hex5 = 56;
+				hex4 = 56;
+				hex3 = 63;
+				hex2 = 62;
+				hex1 = 62;
+				hex0 = 63;
+				UBit = 1;
+			}
+			else if(hex0 == 63 && OBit == 0) //Prev was 0 and bit is 0, will now display LOUUOR
+			{
+				hex5 = 56;
+				hex4 = 63;
+				hex3 = 62;
+				hex2 = 62;
+				hex1 = 63;
+				hex0 = 80;
+				OBit = 1;
+			}
+			else if(hex0 == 80) //Prev was R, will now display OUUORL
+			{
+				hex5 = 63;
+				hex4 = 62;
+				hex3 = 62;
+				hex2 = 63;
+				hex1 = 80;
+				hex0 = 56;
+			}
+			else if(hex0 == 56 && LBit == 0) //Prev was L and bit is 0, will now display UUORLD
+			{
+				hex5 = 62;
+				hex4 = 62;
+				hex3 = 63;
+				hex2 = 80;
+				hex1 = 56;
+				hex0 = 94;
+				LBit = 2;
+			}
+			else if(hex0 == 94) //Prev was D, will now display UORLDH
+			{
+				hex5 = 62;
+				hex4 = 63;
+				hex3 = 80;
+				hex2 = 56;
+				hex1 = 94;
+				hex0 = 118;
+			}

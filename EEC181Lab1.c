@@ -1,10 +1,5 @@
-//Created by CBird on 1-12 at 11:00pm
-//Some parts finished by CBird on 1-13 at 3 am
-//Completely finished, aside from debugging, by CBird on 1-13 at 3pm
-
 // Hello UUorld Program 
 // Digital Alliance: Chris Bird, Lillian Deas, Kaila Balancio 
-
 
 int main(void)
 {
@@ -14,12 +9,12 @@ int main(void)
 //		Initializing each value ADDRESS so we can access and change them
 //
 //********************************************************************************
-	//Pointers to HW that we WRITE TO 
+	//WRITE TO 
 	//volatile int* led = 		(int*)0xFF200040;		//Reded LED address
 	volatile int* hex3_0 = 		(int*)0xFF200020;		//HEX3_HEX0 address
 	volatile int* hex5_4 = 		(int*)0xFF200010;		//HEX5_HEX4 address
 	
-	//Pointers to HW that we READ FROM
+	//READ FROM
 	volatile int* switchptr = 	(int*)0xFF200030;		//SW Slider switch address
 	volatile int* pushptr = 	(int*)0xFF200000;		//KEY push button address
 
@@ -51,272 +46,183 @@ int main(void)
 	int KEY1 = 2;
 	int KEY2 = 4;
 	int KEY3 = 8;
-	
+	int helloUuorld[11] = {118, 121, 56, 56, 63, 62, 62, 63, 80, 56, 94};
+	int uuorldIter = 0;
+
 //********************************************************************************
 //
 //			Main loop that checks for changes in buttons presses/switches
 //
 //********************************************************************************
-	//*(hex3_0) = hex30;
 	while(1)
-	{
-	
-//********************************************************************************
-//
-//			Scrolling HEX vs Scrolling Specific Segments
-//
-//********************************************************************************
-	
-	push_value = *(pushptr);
-	//Figure out how to read button values from single int (maybe 8 bits each?) and set to someCorrectValue
-	if(push_value == KEY3)
-		{
-			//Starts at scrolling
-			if(toggleScroll == 1) //Faster scroll pressed
+	{	
+	//********************************************************************************
+	//
+	//			Scrolling HEX vs Scrolling Specific Segments
+	//
+	//********************************************************************************
+		
+		push_value = *(pushptr);
+		//Figure out how to read button values from single int (maybe 8 bits each?) and set to someCorrectValue
+		if(push_value == KEY3)
 			{
-				//WAS HelloUUorld, NOW Specific Segments
-				toggleScroll = 0;
+				//Starts at scrolling
+				if(toggleScroll == 1) //Faster scroll pressed
+				{
+					//WAS HelloUUorld, NOW Specific Segments
+					toggleScroll = 0;
+				}
+				else if(toggleScroll == 0)
+				{
+					//WAS Speceific Segments, NOW HelloUUorld
+					toggleScroll = 1;
+				}
 			}
-			else if(toggleScroll == 0)
+	//********************************************************************************
+	//
+	//							HELLO UUORLD Message
+	//
+	//********************************************************************************		
+
+		if(toggleScroll == 1) //Scrolling Message
+		{
+			//DON'T USE EXPONENTS, THEY WILL BREAK EVERYTHING
+			//2^0 = 1, 2^8 = 256, 2^16 = 65,536, 2^24 = 16,777,216
+			hex5 = helloUuorld[(uuorldIter)%12];
+			hex4 = helloUuorld[(uuorldIter+1)%12];
+			hex3 = helloUuorld[(uuorldIter+2)%12];
+			hex2 = helloUuorld[(uuorldIter+3)%12];
+			hex1 = helloUuorld[(uuorldIter+4)%12];
+			hex0 = helloUuorld[(uuorldIter+5)%12];
+			uuorldIter++;
+			if(uuorldIter==12)
 			{
-				//WAS Speceific Segments, NOW HelloUUorld
-				toggleScroll = 1;
+				uuorldIter = 0;
 			}
-		}
-	if(toggleScroll == 1) //Scrolling Message
-	{
-		//DON'T USE EXPONENTS, THEY WILL BREAK EVERYTHING
-		//2^0 = 1, 2^8 = 256, 2^16 = 65,536, 2^24 = 16,777,216
 
-		//Then determine next value for HEX 0 and load that
-		//This could be much nicer, but I'm tired
-		if(hex0 == 0 || hex0 == 118) //Prev was H, will now display ORLDHE
-		{
-			hex5 = 63;
-			hex4 = 80;
-			hex3 = 56;
-			hex2 = 94;
-			hex1 = 118;
-			hex0 = 121;
-		}
-		else if(hex0 == 121) //Prev was E, will now display RLDHEL
-		{
-			hex5 = 80;
-			hex4 = 56;
-			hex3 = 94;
-			hex2 = 118;
-			hex1 = 121;
-			hex0 = 56;
-		}
-		else if(hex0 == 56 && LBit == 2) //Prev was L and bit is 2, will now display LDHELL
-		{
-			hex5 = 56;
-			hex4 = 94;
-			hex3 = 118;
-			hex2 = 121;
-			hex1 = 56;
-			hex0 = 56;
-			LBit--; //Set to 1
-		}
-		else if(hex0 == 56 && LBit == 1) //Prev was L and bit is 1, will now display DHELLO
-		{
-			hex5 = 94;
-			hex4 = 118;
-			hex3 = 121;
-			hex2 = 56;
-			hex1 = 56;
-			hex0 = 63;
-			LBit--; //Set to 0
-		}
-		else if(hex0 == 63 && OBit == 1) //Prev was 0 and bit is 1, will now display HELLOU
-		{
-			hex5 = 118;
-			hex4 = 121;
-			hex3 = 56;
-			hex2 = 56;
-			hex1 = 63;
-			hex0 = 62;
-			OBit--; //Set to 0
-		}
-		else if(hex0 == 62 && UBit == 1) //Prev was U and bit is 1, will now display ELLOUU
-		{
-			hex5 = 121;
-			hex4 = 56;
-			hex3 = 56;
-			hex2 = 63;
-			hex1 = 62;
-			hex0 = 62;
-			UBit--; //Set to 0
-		}
-		else if(hex0 == 62 && UBit == 0) //Prev was U and bit is 0, will now display LLOUUO
-		{
-			hex5 = 56;
-			hex4 = 56;
-			hex3 = 63;
-			hex2 = 62;
-			hex1 = 62;
-			hex0 = 63;
-			UBit = 1;
-		}
-		else if(hex0 == 63 && OBit == 0) //Prev was 0 and bit is 0, will now display LOUUOR
-		{
-			hex5 = 56;
-			hex4 = 63;
-			hex3 = 62;
-			hex2 = 62;
-			hex1 = 63;
-			hex0 = 80;
-			OBit = 1;
-		}
-		else if(hex0 == 80) //Prev was R, will now display OUUORL
-		{
-			hex5 = 63;
-			hex4 = 62;
-			hex3 = 62;
-			hex2 = 63;
-			hex1 = 80;
-			hex0 = 56;
-		}
-		else if(hex0 == 56 && LBit == 0) //Prev was L and bit is 0, will now display UUORLD
-		{
-			hex5 = 62;
-			hex4 = 62;
-			hex3 = 63;
-			hex2 = 80;
-			hex1 = 56;
-			hex0 = 94;
-			LBit = 2;
-		}
-		else if(hex0 == 94) //Prev was D, will now display UORLDH
-		{
-			hex5 = 62;
-			hex4 = 63;
-			hex3 = 80;
-			hex2 = 56;
-			hex1 = 94;
-			hex0 = 118;
-		}
-		
-		//Add them all together to make correct hex displays
-		hex30 = (hex3 * 16777216) + (hex2 * 65536) + (hex1 * 256) + (hex0);
-		hex54 = (hex5 * 256) + (hex4);
-		
-		//Set new values to hex displays
-		*(hex3_0) = hex30;
-		*(hex5_4) = hex54;
-		
-	}
-	if(toggleScroll == 0) //Specific Segment Display
-	//THIS NEEDS TO BE DONE
-	{
-		//Take switch values, and correspond them to specific segments
-		//SW0 controls top segment, and continues clockwise with SW1, 2, 3, 4, and 5
-		//SW6 controls middle segment of first display
-		//SW7 controls top segment of second display, SW8 and SW9 control right side
-		//0000_0000_0000_0000_1xxx_xxxx_1xxx_xxxx
-		//When Switch is DOWN (off) segment is off
-		
-		//Load current values of the switches into the 32-bit int
-		switch_value = *(switchptr);
-		hex0 = switch_value; //hex0 holds ALL bits, too many to be useful
-		hex0 = hex0 << 25; //Had 10 bits, only want 7, 32-7 = 25, shift left 25 bits, then back to right to 'clear' upper bits
-		hex0 = hex0 >> 25; //Now holds 0000_0000_0000_0000_0000_0000_0xxx_xxxx
-		hex1 = switch_value; //hex1 holds ALL bits, too many to be useful
-		hex1 = hex1 >> 7; //Had 10 bits, only want 3 in places 7-9, 'clear' lower 7 bits
-		hex1 = hex1 << 1; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
-		//Hex1 now holds the proper value to show on hex1
-		
-		if(specificScrollInt == 0)
-		{
-			hex30 = (hex1 * 256) + (hex0); //Should now hold 0000_0000_0000_0000_0000_0111_0222_2222
-			*(hex3_0) = hex30; //Write back to hex displays
-			//THIS WILL DISPLAY ON HEX1 AND HEX0 WITH THE CORRECT THINGS SHOWN ON THE SWITCHES
-			specificScrollInt++;
-		}
-		else if(specificScrollInt == 1)
-		{
-			hex30 = (hex1 * 65536) + (hex0*256); 
-			*(hex3_0) = hex30;
-			specificScrollInt++;
-		}
-		else if(specificScrollInt == 2)
-		{
-			hex30 = (hex1 * 16777216) + (hex0*65536); 
-			*(hex3_0) = hex30;
-			specificScrollInt++;
-		}
-		else if(specificScrollInt == 3)
-		{
-			hex30 = (hex0 *16777216); 
-			*(hex3_0) = hex30;
-			hex54 = (hex1);
-			*(hex5_4) = hex54;
-			specificScrollInt++;
-		} 
-		else if(specificScrollInt == 4)
-		{
-			hex54 = (hex1 * 256) + (hex0);
-			*(hex5_4) = hex54;
-			specificScrollInt++;
-		}
-		else if(specificScrollInt == 5)
-		{
-			hex30 = (hex1); 
-			*(hex3_0) = hex30;
-			hex54 = (hex0 * 256);
-			*(hex5_4) = hex54;
-			specificScrollInt = 0;
-		}
-		
-		//Only need 01, 12, 23, 34, 45, 51 6 different scroll sections
-		
-		//setSpecificBit of specificSegmentDisplay to 0 = switch_value;
-	}
+			//HELLOU -> ELLOUU -> LLOUUO -> etc
 
-	
-//********************************************************************************
-//
-//						Scroll Speed Changers (+ or -)
-//
-//********************************************************************************
-	
-	//Scroll Speed Variance
-	
-	if (push_value == KEY2) //as soon as button 2 value is low do this
-	{
-		delay_count = delay_count + 200000;
-		//Set delay value to 3 (longer delay time... aka slower);
-	}
-	
-	if (push_value == KEY1) //as soon as button 3 value is low do this
-	{
-		delay_count = delay_count - 200000;
-		//set delay value to 1 (shorter delay time... aka faster);
-	}
-	bullshitVariable = 0;
-	while(bullshitVariable++ < delay_count);
-	
-//********************************************************************************
-//
-//					Pause everything until button is pressed
-//
-//********************************************************************************	
-	
-	if (push_value == KEY0) //as soon as button 4 value is low do this
-	{
-		infiniteDelay = 1;
-		while(infiniteDelay == 1)
-		{
-			bullshitVariable = 0;
-			while(bullshitVariable++ < (delay_count+10000000)){};
+			//Add them all together to make correct hex displays
+			hex30 = (hex3 * 16777216) + (hex2 * 65536) + (hex1 * 256) + (hex0);
+			hex54 = (hex5 * 256) + (hex4);
 			
-			if(push_value == KEY0)
+			//Set new values to hex displays
+			*(hex3_0) = hex30;
+			*(hex5_4) = hex54;		
+		}
+		if(toggleScroll == 0) //Specific Segment Display
+		//THIS NEEDS TO BE DONE
+		{
+			//Take switch values, and correspond them to specific segments
+			//SW0 controls top segment, and continues clockwise with SW1, 2, 3, 4, and 5
+			//SW6 controls middle segment of first display
+			//SW7 controls top segment of second display, SW8 and SW9 control right side
+			//0000_0000_0000_0000_1xxx_xxxx_1xxx_xxxx
+			//When Switch is DOWN (off) segment is off
+			
+			//Load current values of the switches into the 32-bit int
+			switch_value = *(switchptr);
+			hex0 = 0;
+			hex1 = 0;
+			hex0 = switch_value; //hex0 holds ALL bits, too many to be useful
+			hex0 = hex0 << 25; //Had 10 bits, only want 7, 32-7 = 25, shift left 25 bits, then back to right to 'clear' upper bits
+			hex0 = hex0 >> 25; //Now holds 0000_0000_0000_0000_0000_0000_0xxx_xxxx
+			hex1 = switch_value;
+			hex1 = hex1 >> 7; //Had 10 bits, only want 3 in places 7-9, 'clear' lower 7 bits
+			hex1 = hex1 << 1; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
+			
+			if(specificScrollInt == 0)
 			{
-				infiniteDelay = 0;
+				hex30 = (hex1 * 256) + (hex0); //Should now hold 0000_0000_0000_0000_0000_0111_0222_2222
+				*(hex3_0) = hex30;
+				specificScrollInt++;
+			}
+			else if(specificScrollInt == 1)
+			{
+				hex30 = (hex1 * 65536) + (hex0*256); 
+				*(hex3_0) = hex30;
+				specificScrollInt++;
+			}
+			else if(specificScrollInt == 2)
+			{
+				hex30 = (hex1 * 16777216) + (hex0*65536); 
+				*(hex3_0) = hex30;
+				specificScrollInt++;
+			}
+			else if(specificScrollInt == 3)
+			{
+				hex30 = (hex0 *16777216); 
+				*(hex3_0) = hex30;
+				hex54 = (hex1);
+				*(hex5_4) = hex54;
+				specificScrollInt++;
+			} 
+			else if(specificScrollInt == 4)
+			{
+				hex54 = (hex1 * 256) + (hex0);
+				*(hex5_4) = hex54;
+				specificScrollInt++;
+			}
+			else if(specificScrollInt == 5)
+			{
+				hex30 = (hex1); 
+				*(hex3_0) = hex30;
+				hex54 = (hex0 * 256);
+				*(hex5_4) = hex54;
+				specificScrollInt = 0;
+			}
+			
+			//Only need 01, 12, 23, 34, 45, 51 6 different scroll sections
+			
+			//setSpecificBit of specificSegmentDisplay to 0 = switch_value;
+		}
+
+		
+	//********************************************************************************
+	//
+	//						Scroll Speed Changers (+ or -)
+	//
+	//********************************************************************************
+		
+		//Scroll Speed Variance
+		
+		if (push_value == KEY2) //as soon as button 2 value is low do this
+		{
+			delay_count = delay_count + 200000;
+			//Set delay value to 3 (longer delay time... aka slower);
+		}
+		
+		if (push_value == KEY1) //as soon as button 3 value is low do this
+		{
+			delay_count = delay_count - 200000;
+			//set delay value to 1 (shorter delay time... aka faster);
+		}
+		bullshitVariable = 0;
+		while(bullshitVariable++ < delay_count);
+		
+	//********************************************************************************
+	//
+	//					Pause everything until button is pressed
+	//
+	//********************************************************************************	
+		
+		if (push_value == KEY0) //as soon as button 4 value is low do this
+		{
+			infiniteDelay = 1;
+			while(infiniteDelay == 1)
+			{
+				bullshitVariable = 0;
+				while(bullshitVariable++ < (delay_count+10000)){};
+				
+
+				push_value = *(pushptr); //This is needed! This fixes our problem.
+				if(push_value == KEY0)
+				{
+					infiniteDelay = 0;
+				}
 			}
 		}
 	}
-}
 }
 
 //********************************************************************************
