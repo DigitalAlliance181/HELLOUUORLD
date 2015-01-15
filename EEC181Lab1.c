@@ -3,7 +3,6 @@
 
 int main(void)
 {
-
 //********************************************************************************
 //
 //		Initializing each value ADDRESS so we can access and change them
@@ -35,9 +34,6 @@ int main(void)
 	int hex54 = 0; 				// 32-Bit int for HEX5 - HEX4
 	int hex5 = 0;
 	int hex4 = 0;
-	int LBit = 2;			//Bits to determine which part of the scrolling it's on
-	int OBit = 1;
-	int UBit = 1;
 	int specificScrollInt = 0;
 	int delay_count = 1000000;
 	int infiniteDelay = 0;
@@ -63,18 +59,17 @@ int main(void)
 	//********************************************************************************
 		
 		push_value = *(pushptr);
-		//Figure out how to read button values from single int (maybe 8 bits each?) and set to someCorrectValue
 		if(push_value == KEY3)
 			{
 				//Starts at scrolling
 				if(toggleScroll == 1) //Faster scroll pressed
 				{
-					//WAS HelloUUorld, NOW Specific Segments
+					//Set to Specific Segments
 					toggleScroll = 0;
 				}
 				else if(toggleScroll == 0)
 				{
-					//WAS Speceific Segments, NOW HelloUUorld
+					//Set to HelloUUorld
 					toggleScroll = 1;
 				}
 			}
@@ -127,6 +122,7 @@ int main(void)
 			hex0 = switch_value; //hex0 holds ALL bits, too many to be useful
 			hex0 = hex0 << 25; //Had 10 bits, only want 7, 32-7 = 25, shift left 25 bits, then back to right to 'clear' upper bits
 			hex0 = hex0 >> 25; //Now holds 0000_0000_0000_0000_0000_0000_0xxx_xxxx
+			//Try using AND when I have the time
 			hex1 = switch_value;
 			hex1 = hex1 >> 7; //Had 10 bits, only want 3 in places 7-9, 'clear' lower 7 bits
 			hex1 = hex1 << 1; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
@@ -135,6 +131,8 @@ int main(void)
 			{
 				hex30 = (hex1 * 256) + (hex0); //Should now hold 0000_0000_0000_0000_0000_0111_0222_2222
 				*(hex3_0) = hex30;
+				hex54 = 0;
+				*(hex5_4) = hex54; //I AM THE STUPIDEST PERSON EVER
 				specificScrollInt++;
 			}
 			else if(specificScrollInt == 1)
