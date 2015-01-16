@@ -157,6 +157,8 @@ int main(void)
 			} 
 			else if(specificScrollInt == 4)
 			{
+				hex30 = 0;
+				*(hex3_0) = hex30;
 				hex54 = (hex1 * 256) + (hex0);
 				*(hex5_4) = hex54;
 				specificScrollInt++;
