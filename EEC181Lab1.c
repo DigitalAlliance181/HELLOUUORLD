@@ -83,14 +83,14 @@ int main(void)
 		{
 			//DON'T USE EXPONENTS, THEY WILL BREAK EVERYTHING
 			//2^0 = 1, 2^8 = 256, 2^16 = 65,536, 2^24 = 16,777,216
-			hex5 = helloUuorld[(uuorldIter)%12];
-			hex4 = helloUuorld[(uuorldIter+1)%12];
-			hex3 = helloUuorld[(uuorldIter+2)%12];
-			hex2 = helloUuorld[(uuorldIter+3)%12];
-			hex1 = helloUuorld[(uuorldIter+4)%12];
-			hex0 = helloUuorld[(uuorldIter+5)%12];
+			hex5 = helloUuorld[(uuorldIter)%11];
+			hex4 = helloUuorld[(uuorldIter+1)%11];
+			hex3 = helloUuorld[(uuorldIter+2)%11];
+			hex2 = helloUuorld[(uuorldIter+3)%11];
+			hex1 = helloUuorld[(uuorldIter+4)%11];
+			hex0 = helloUuorld[(uuorldIter+5)%11];
 			uuorldIter++;
-			if(uuorldIter==12)
+			if(uuorldIter==11)
 			{
 				uuorldIter = 0;
 			}
@@ -125,7 +125,7 @@ int main(void)
 			//Try using AND when I have the time
 			hex1 = switch_value;
 			hex1 = hex1 >> 7; //Had 10 bits, only want 3 in places 7-9, 'clear' lower 7 bits
-			hex1 = hex1 << 1; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
+			//hex1 = hex1 << 1; //Lower 10 bits went from aa_bbbb_bbbb -> aaab -> aaab_0000_0000
 			
 			if(specificScrollInt == 0)
 			{
@@ -212,12 +212,14 @@ int main(void)
 			while(infiniteDelay == 1)
 			{
 				bullshitVariable = 0;
-				while(bullshitVariable++ < (delay_count+10000)){};
+				while(bullshitVariable++ < (delay_count+100000)){};
 				
 
 				push_value = *(pushptr); //This is needed! This fixes our problem.
 				if(push_value == KEY0)
 				{
+					bullshitVariable = 0;
+					while(bullshitVariable++ < (delay_count+1000)){};
 					infiniteDelay = 0;
 				}
 			}
